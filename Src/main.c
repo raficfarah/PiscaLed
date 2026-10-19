@@ -44,33 +44,45 @@ int main(void)
 	//unsigned int estado_anterior = 0;
     /* Loop forever */
 	for(;;){
-		//ODR: contorla o valor da saída.
+		//ODR: controla o valor da saída.
+
+		// Inverte o valor do LED periódicamente. Implementado AND e OR.
+		
+		/* 
 		GPIOD->ODR &= ~(1 << 12U);//ESCREVE 0 EM ODR12 - APAGA O LED
 
 		for(unsigned int i=0; i<1000000; i++) __NOP();
 
 		GPIOD->ODR |= (1 << 12U) ;// ACENDE O LED
-		for(unsigned int i=0; i<1000000; i++) __NOP();
+		for(unsigned int i=0; i<1000000; i++) __NOP(); 
+		*/
 
 		/* ************ */
 
-		//reimplemnetação com xor
-		/*GPIOD->ODR ^= (1 << 12U) ;// INVERTE O LED.
-		for(unsigned int i=0; i<1000000; i++) __NOP();*/
+		// Inverte o valor do LED periódicamente. Implementado XOR.
+		/*
+		GPIOD->ODR ^= (1 << 12U) ;// INVERTE O LED.
+		for(unsigned int i=0; /* Loop forever */i<1000000; i++) __NOP();
+		*/
 
 		/* ************ */
 		
-		//inverte o led quando aperto o botão
-		 
-		/* 'unsigned int estado_atual = GPIOA->IDR & ( 1 << 0 );
+		
+		// Inverte o LED quando aperta o botão. 
+		// Necessário definir estado_anterior antes do loop.
+		/*
+		unsigned int estado_atual = GPIOA->IDR & ( 1 << 0 );
 		if(estado_atual && !estado_anterior) {
 			GPIOD->ODR ^= (1 << 12U) ;// INVERTE O LED
 		}
 
-		estado_anterior = estado_atual;' */
+		estado_anterior = estado_atual;
+		*/
 
 		/* ************ */
 
+		// Acende o LED quando o botão é apertado
+		// e desliga quando o botão é solto.
 		unsigned int estado_atual = GPIOA->IDR & 0b1;
 		if(estado_atual) {
 			GPIOD->ODR |= (1 << 12U) ;// ACENDE O LED
@@ -78,7 +90,5 @@ int main(void)
 		if(!estado_atual) {
 			GPIOD->ODR &= ~(1 << 12U);// DESLIGA O LED
 		}
-
-		//estado_anterior = estado_atual;
 	}
 }
